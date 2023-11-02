@@ -1,5 +1,5 @@
 import { Redirect } from "expo-router";
 
-export default () => (
-    <Redirect href="/tutorial" />
-)
+export default function Home() {
+    return <Redirect href="/tutorial" />
+}
