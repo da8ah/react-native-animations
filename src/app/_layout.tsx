@@ -1,13 +1,16 @@
-import { FontAwesome } from "@expo/vector-icons"
-import { Stack, router } from "expo-router"
+import { Ionicons } from "@expo/vector-icons"
+import { router } from "expo-router"
+import { Drawer } from 'expo-router/drawer'
 import { StatusBar } from "expo-status-bar"
 import { TouchableOpacity } from "react-native"
 
 export default function HomeLayout() {
     return <>
-        <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="(tabs)" />
-            <Stack.Screen
+        <Drawer
+            screenOptions={{ swipeEdgeWidth: 0 }}
+        >
+            <Drawer.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Drawer.Screen
                 name="drawer/index"
                 options={{
                     headerShown: true,
@@ -15,7 +18,7 @@ export default function HomeLayout() {
                     headerLeft: HeaderButton
                 }}
             />
-        </Stack>
+        </Drawer>
         <StatusBar style="auto" />
     </>
 }
@@ -23,9 +26,8 @@ export default function HomeLayout() {
 
 function HeaderButton() {
     return <TouchableOpacity
-        style={{ paddingHorizontal: 10 }}
         onPress={() => router.push("/route")}
     >
-        <FontAwesome name="arrow-left" size={32} color={"black"} />
+        <Ionicons name="md-close-circle" size={32} color={"black"} />
     </TouchableOpacity>
 }

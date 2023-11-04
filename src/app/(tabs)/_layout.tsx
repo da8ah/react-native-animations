@@ -1,6 +1,6 @@
 import { FontAwesome } from "@expo/vector-icons"
 import { Tabs, router } from "expo-router"
-import { TouchableOpacity, View } from "react-native"
+import { TouchableOpacity } from "react-native"
 
 export default function TabsLayout() {
     return <Tabs
