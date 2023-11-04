@@ -1,16 +1,8 @@
 import { FontAwesome } from "@expo/vector-icons"
-import { Tabs, router } from "expo-router"
-import { TouchableOpacity } from "react-native"
+import { Tabs } from "expo-router"
 
 export default function TabsLayout() {
-    return <Tabs
-        screenOptions={{
-            headerLeft: HeaderButton,
-            headerTitle: "",
-            tabBarLabelStyle: { textTransform: "capitalize" },
-            tabBarActiveTintColor: "black"
-        }}
-    >
+    return <Tabs screenOptions={{ headerShown: false }}>
         <Tabs.Screen
             name="route"
             options={{
@@ -24,13 +16,4 @@ export default function TabsLayout() {
             }}
         />
     </Tabs>
-}
-
-function HeaderButton() {
-    return <TouchableOpacity
-        style={{ paddingHorizontal: 10 }}
-        onPress={() => router.push("/drawer/")}
-    >
-        <FontAwesome name="list" size={32} color={"black"} />
-    </TouchableOpacity>
 }
