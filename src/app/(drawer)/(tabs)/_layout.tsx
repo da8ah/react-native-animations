@@ -2,7 +2,7 @@ import { FontAwesome } from "@expo/vector-icons"
 import { Tabs } from "expo-router"
 
 export default function TabsLayout() {
-    return <Tabs screenOptions={{ headerShown: false }}>
+    return <Tabs screenOptions={{ headerShown: false, tabBarLabel: "" }}>
         <Tabs.Screen
             name="route"
             options={{
