@@ -50,7 +50,7 @@ export default function Route() {
                 <Step
                     key={i}
                     coorX={coorX}
-                    setCoor={i === 9 ? setScroll : undefined}
+                    setScrollToEnd={i === 9 ? setScroll : undefined}
                 >
                     <Text>{i + 1}</Text>
                 </Step>
