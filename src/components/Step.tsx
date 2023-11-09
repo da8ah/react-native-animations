@@ -1,8 +1,9 @@
+import { router } from 'expo-router';
 import { StyleSheet } from 'react-native';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 
-export default function Step(props: { children?: JSX.Element, coorX?: number, setScrollToEnd?: ({ x, y }: { x: number, y: number }) => void }) {
+export default function Step(props: { children?: JSX.Element, index: number, coorX?: number, setScrollToEnd?: ({ x, y }: { x: number, y: number }) => void }) {
     const pressed = useSharedValue(false);
 
     const tap = Gesture.Tap()
@@ -22,6 +23,7 @@ export default function Step(props: { children?: JSX.Element, coorX?: number, se
         <GestureDetector gesture={tap}>
             <Animated.View
                 style={[styles.animatedView, animatedDefault]}
+                onTouchStart={() => router.push({ pathname: "/(drawer)/(tabs)/(route)/[viewer]", params: { viewer: props.index } })}
             >
                 {props.children}
                 {/* <Text>Step</Text> */}

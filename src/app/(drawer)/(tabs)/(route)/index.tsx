@@ -2,7 +2,21 @@ import Step from "@/components/Step";
 import { useState } from "react";
 import { ScrollView, Text } from "react-native";
 
-export default function Route() {
+// Fetch
+export const screenTitles = {
+    ["1" as string]: "Slide",
+    ["2" as string]: "Typing",
+    ["3" as string]: "Split",
+    ["4" as string]: "Appear",
+    ["5" as string]: "Fade",
+    ["6" as string]: "Flip",
+    ["7" as string]: "Loading",
+    ["8" as string]: "Wave",
+    ["9" as string]: "Bounce",
+    ["10" as string]: "Pulse",
+};
+
+export default function RouteScreen() {
 
     const [scroll, setScroll] = useState({ x: 0, y: 0 })
     const [width, setWidth] = useState(0);
@@ -46,15 +60,16 @@ export default function Route() {
         onContentSizeChange={(w) => setWidth(w)}
     >
         {
-            stepsGenerator(10)[0].reverse().map((coorX, i) => (
+            stepsGenerator(Object.keys(screenTitles).length)[0].reverse().map((coorX, i) => (
                 <Step
-                    key={i}
+                    key={`step-${i + 1}`}
+                    index={i + 1}
                     coorX={coorX}
-                    setScrollToEnd={i === 9 ? setScroll : undefined}
+                    setScrollToEnd={i + 1 === 10 ? setScroll : undefined}
                 >
                     <Text>{i + 1}</Text>
                 </Step>
             ))
         }
-    </ScrollView >
+    </ScrollView>
 }
