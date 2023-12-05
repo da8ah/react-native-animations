@@ -1,3 +1,4 @@
+import Bounce from "@/components/Bounce";
 import Pulse from "@/components/Pulse";
 import { useLocalSearchParams } from "expo-router";
 import { Text, View } from "react-native";
@@ -13,7 +14,7 @@ export default function Viewer() {
         // ["6" as string]: "Flip",
         // ["7" as string]: "Loading",
         // ["8" as string]: "Wave",
-        // ["9" as string]: "Bounce",
+        ["9" as string]: <Bounce />,
         ["10" as string]: <Pulse />,
     };
 

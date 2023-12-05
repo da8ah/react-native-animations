@@ -2,21 +2,23 @@ import { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from "react-native-reanimated";
 
-export default function Pulse() {
-    const duration = 500
-    const linear = useSharedValue({ scale: 1, opacity: 1 })
+export default function Bounce() {
+    const duration = 1000
+    const linear = useSharedValue({ x: -5, y: -5 })
 
     const animatedDefault = useAnimatedStyle(() => ({
-        transform: [{ scale: linear.value.scale }],
-        opacity: linear.value.opacity
+        transform: [
+            { translateX: linear.value.x },
+            { translateY: linear.value.y }
+        ]
     }))
 
     useEffect(() => {
         linear.value = withRepeat(
             withTiming(
                 {
-                    scale: linear.value.scale + .1,
-                    opacity: linear.value.opacity - .5
+                    x: linear.value.x + 5,
+                    y: linear.value.y + 5
                 },
                 {
                     duration,
