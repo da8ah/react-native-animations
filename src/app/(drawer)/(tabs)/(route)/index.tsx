@@ -1,19 +1,29 @@
+import Appear from "@/components/Appear";
+import Bounce from "@/components/Bounce";
+import Fade from "@/components/Fade";
+import Flip from "@/components/Flip";
+import Loading from "@/components/Loading";
+import Pulse from "@/components/Pulse";
+import Slide from "@/components/Slide";
+import Split from "@/components/Split";
 import Step from "@/components/Step";
+import Typing from "@/components/Typing";
+import Wave from "@/components/Wave";
 import { useState } from "react";
 import { ScrollView, Text } from "react-native";
 
 // Fetch
-export const screenTitles = {
-    ["1" as string]: "Slide",
-    ["2" as string]: "Typing",
-    ["3" as string]: "Split",
-    ["4" as string]: "Appear",
-    ["5" as string]: "Fade",
-    ["6" as string]: "Flip",
-    ["7" as string]: "Loading",
-    ["8" as string]: "Wave",
-    ["9" as string]: "Bounce",
-    ["10" as string]: "Pulse",
+export const components = {
+    ["1" as string]: <Slide />,
+    ["2" as string]: <Typing />,
+    ["3" as string]: <Split />,
+    ["4" as string]: <Appear />,
+    ["5" as string]: <Fade />,
+    ["6" as string]: <Flip />,
+    ["7" as string]: <Loading />,
+    ["8" as string]: <Wave />,
+    ["9" as string]: <Bounce />,
+    ["10" as string]: <Pulse />,
 };
 
 export default function RouteScreen() {
@@ -60,7 +70,7 @@ export default function RouteScreen() {
         onContentSizeChange={(w) => setWidth(w)}
     >
         {
-            stepsGenerator(Object.keys(screenTitles).length)[0].reverse().map((coorX, i) => (
+            stepsGenerator(Object.keys(components).length)[0].reverse().map((coorX, i) => (
                 <Step
                     key={`step-${i + 1}`}
                     index={i + 1}

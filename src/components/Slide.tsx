@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withTiming } from "react-native-reanimated";
 
-export default function Bounce() {
+export default function Slide() {
     const duration = 500
     const linear = useSharedValue(0)
 
