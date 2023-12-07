@@ -1,17 +1,26 @@
 import { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
-import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withTiming } from "react-native-reanimated";
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withTiming } from "react-native-reanimated";
 
 export default function Appear() {
-    const duration = 500
-    const linear = useSharedValue(0)
+    const duration = 200
+    const shared = useSharedValue({ scale: 1.1, opacity: 0 })
 
     const animatedDefault = useAnimatedStyle(() => ({
-        transform: [{ translateY: linear.value }]
+        transform: [{ scale: shared.value.scale }],
+        opacity: shared.value.opacity
     }))
 
     useEffect(() => {
-        linear.value = withRepeat(withTiming(linear.value - 50, { duration }), -1, true)
+        shared.value = withSequence(
+            withDelay(duration * 2.5, withTiming({ scale: shared.value.scale - .1, opacity: shared.value.opacity + 1 }, { duration, easing: Easing.linear, })),
+            withDelay(duration * 5, withTiming({ scale: shared.value.scale, opacity: shared.value.opacity }, { duration, easing: Easing.linear, })),
+            withRepeat(withDelay(duration * 5,
+                withSequence(
+                    withDelay(duration * 2.5, withTiming({ scale: shared.value.scale - .1, opacity: shared.value.opacity + 1 }, { duration, easing: Easing.linear, })),
+                    withDelay(duration * 5, withTiming({ scale: shared.value.scale, opacity: shared.value.opacity }, { duration, easing: Easing.linear, }))
+                )), -1, true)
+        )
     }, [])
 
     return <View style={styles.container}>

@@ -4,25 +4,18 @@ import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTim
 
 export default function Pulse() {
     const duration = 500
-    const linear = useSharedValue({ scale: 1, opacity: 1 })
+    const shared = useSharedValue({ scale: 1, opacity: 1 })
 
     const animatedDefault = useAnimatedStyle(() => ({
-        transform: [{ scale: linear.value.scale }],
-        opacity: linear.value.opacity
+        transform: [{ scale: shared.value.scale }],
+        opacity: shared.value.opacity
     }))
 
     useEffect(() => {
-        linear.value = withRepeat(
-            withTiming(
-                {
-                    scale: linear.value.scale + .1,
-                    opacity: linear.value.opacity - .5
-                },
-                {
-                    duration,
-                    easing: Easing.linear,
-                }
-            ), -1, true)
+        shared.value = withRepeat(withTiming({
+            scale: shared.value.scale + .1,
+            opacity: shared.value.opacity - .5
+        }, { duration, easing: Easing.linear, }), -1, true)
     }, [])
 
     return <View style={styles.container}>

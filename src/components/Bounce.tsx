@@ -4,14 +4,14 @@ import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withTiming } fr
 
 export default function Bounce() {
     const duration = 500
-    const linear = useSharedValue(0)
+    const shared = useSharedValue(0)
 
     const animatedDefault = useAnimatedStyle(() => ({
-        transform: [{ translateY: linear.value }]
+        transform: [{ translateY: shared.value }]
     }))
 
     useEffect(() => {
-        linear.value = withRepeat(withTiming(linear.value - 50, { duration }), -1, true)
+        shared.value = withRepeat(withTiming(shared.value - 50, { duration }), -1, true)
     }, [])
 
     return <View style={styles.container}>
