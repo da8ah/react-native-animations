@@ -14,15 +14,15 @@ import { ScrollView, Text } from "react-native";
 
 // Fetch
 export const components = {
-    ["1" as string]: <Slide />,
-    ["2" as string]: <Typing />,
-    ["3" as string]: <Split />,
-    ["4" as string]: <Appear />,
-    ["5" as string]: <Fade />,
-    ["6" as string]: <Flip />,
-    ["7" as string]: <Loading />,
-    ["8" as string]: <Wave />,
-    ["9" as string]: <Bounce />,
+    ["1" as string]: <Flip />,
+    ["2" as string]: <Slide />,
+    ["3" as string]: <Typing />,
+    ["4" as string]: <Split />,
+    ["5" as string]: <Loading />,
+    ["6" as string]: <Wave />,
+    ["7" as string]: <Bounce />,
+    ["8" as string]: <Appear />,
+    ["9" as string]: <Fade />,
     ["10" as string]: <Pulse />,
 };
 

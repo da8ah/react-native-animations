@@ -1,6 +1,6 @@
 {
   "name": "react-native-animations",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "main": "expo-router/entry",
   "scripts": {
     "start": "expo start --tunnel",
@@ -11,6 +11,7 @@
     "@react-navigation/drawer": "^6.6.6",
     "expo": "^49.0.16",
     "expo-constants": "^14.4.2",
+    "expo-linear-gradient": "^12.5.0",
     "expo-linking": "^6.0.0",
     "expo-router": "^2.0.10",
     "expo-status-bar": "^1.7.1",

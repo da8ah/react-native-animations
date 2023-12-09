@@ -1,21 +1,23 @@
 import { useEffect } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withTiming } from "react-native-reanimated";
 
 export default function Flip() {
-    const duration = 500
-    const linear = useSharedValue(0)
+    const duration = 1000
+    const shared = useSharedValue("0deg")
 
     const animatedDefault = useAnimatedStyle(() => ({
-        transform: [{ translateY: linear.value }]
+        transform: [{ rotateY: shared.value }]
     }))
 
     useEffect(() => {
-        linear.value = withRepeat(withTiming(linear.value - 50, { duration }), -1, true)
+        shared.value = withRepeat(withTiming("180deg", { duration }), -1, true)
     }, [])
 
     return <View style={styles.container}>
-        <Animated.View style={[styles.animatedView, animatedDefault]} />
+        <Animated.View style={[styles.animatedView, animatedDefault]}>
+            <Text style={{ fontSize: 32 }}>💲</Text>
+        </Animated.View>
     </View>
 }
 
@@ -28,10 +30,10 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     animatedView: {
-        backgroundColor: "blue",
+        backgroundColor: "#FFD700",
         width: "100%",
         height: "100%",
-        borderRadius: 10,
+        borderRadius: 100,
         justifyContent: "center",
         alignItems: "center"
     }
