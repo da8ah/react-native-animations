@@ -15,8 +15,8 @@ import { ScrollView, Text } from "react-native";
 // Fetch
 export const components = {
     ["1" as string]: <Flip />,
-    ["2" as string]: <Slide />,
-    ["3" as string]: <Typing />,
+    ["2" as string]: <Typing />,
+    ["3" as string]: <Slide />,
     ["4" as string]: <Split />,
     ["5" as string]: <Loading />,
     ["6" as string]: <Wave />,

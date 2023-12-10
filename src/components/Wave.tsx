@@ -1,21 +1,60 @@
+import { LinearGradient } from "expo-linear-gradient";
 import { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
-import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withTiming } from "react-native-reanimated";
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming } from "react-native-reanimated";
 
 export default function Wave() {
-    const duration = 500
-    const linear = useSharedValue(0)
+    const duration = 200
+    const shared = useSharedValue({ x: -50, y: 0 })
 
     const animatedDefault = useAnimatedStyle(() => ({
-        transform: [{ translateY: linear.value }]
+        transform: [
+            { translateX: shared.value.x },
+            { translateY: shared.value.y },
+        ]
     }))
 
     useEffect(() => {
-        linear.value = withRepeat(withTiming(linear.value - 50, { duration }), -1, true)
+        shared.value =
+            withRepeat(
+                withSequence(
+                    withTiming({ x: shared.value.x + 10, y: shared.value.y + 10 }, { duration, easing: Easing.linear }),
+                    withTiming({ x: shared.value.x + 20, y: shared.value.y - 20 }, { duration, easing: Easing.linear }),
+                    withTiming({ x: shared.value.x + 30, y: shared.value.y + 10 }, { duration, easing: Easing.linear }),
+                    withTiming({ x: shared.value.x + 40, y: shared.value.y + 20 }, { duration, easing: Easing.linear }),
+
+                    withTiming({ x: shared.value.x + 50, y: shared.value.y + 10 }, { duration, easing: Easing.linear }),
+                    withTiming({ x: shared.value.x + 60, y: shared.value.y - 20 }, { duration, easing: Easing.linear }),
+                    withTiming({ x: shared.value.x + 70, y: shared.value.y + 10 }, { duration, easing: Easing.linear }),
+                    withTiming({ x: shared.value.x + 80, y: shared.value.y + 20 }, { duration, easing: Easing.linear }),
+
+                    withTiming({ x: shared.value.x + 90, y: shared.value.y + 10 }, { duration, easing: Easing.linear }),
+                    withTiming({ x: shared.value.x + 100, y: shared.value.y - 20 }, { duration, easing: Easing.linear }),
+                    withTiming({ x: shared.value.x + 110, y: shared.value.y + 10 }, { duration, easing: Easing.linear }),
+                    withTiming({ x: shared.value.x + 120, y: shared.value.y + 20 }, { duration, easing: Easing.linear }),
+
+                    withTiming({ x: shared.value.x + 110, y: shared.value.y + 10 }, { duration, easing: Easing.linear }),
+                    withTiming({ x: shared.value.x + 100, y: shared.value.y - 20 }, { duration, easing: Easing.linear }),
+                    withTiming({ x: shared.value.x + 90, y: shared.value.y + 10 }, { duration, easing: Easing.linear }),
+                    withTiming({ x: shared.value.x + 80, y: shared.value.y + 20 }, { duration, easing: Easing.linear }),
+
+                    withTiming({ x: shared.value.x + 70, y: shared.value.y + 10 }, { duration, easing: Easing.linear }),
+                    withTiming({ x: shared.value.x + 60, y: shared.value.y - 20 }, { duration, easing: Easing.linear }),
+                    withTiming({ x: shared.value.x + 50, y: shared.value.y + 10 }, { duration, easing: Easing.linear }),
+                    withTiming({ x: shared.value.x + 40, y: shared.value.y + 20 }, { duration, easing: Easing.linear }),
+
+                    withTiming({ x: shared.value.x + 30, y: shared.value.y + 10 }, { duration, easing: Easing.linear }),
+                    withTiming({ x: shared.value.x + 20, y: shared.value.y - 20 }, { duration, easing: Easing.linear }),
+                    withTiming({ x: shared.value.x + 10, y: shared.value.y + 10 }, { duration, easing: Easing.linear }),
+                    withTiming({ x: shared.value.x, y: shared.value.y + 20 }, { duration, easing: Easing.linear }),
+                )
+                , -1, true)
     }, [])
 
     return <View style={styles.container}>
-        <Animated.View style={[styles.animatedView, animatedDefault]} />
+        <Animated.View style={[styles.animatedView, animatedDefault]}>
+            <LinearGradient style={{ width: "100%", height: "100%", borderRadius: 100 }} colors={['aqua', 'deepskyblue', 'blue', 'blue']} />
+        </Animated.View>
     </View>
 }
 
@@ -29,9 +68,9 @@ const styles = StyleSheet.create({
     },
     animatedView: {
         backgroundColor: "blue",
-        width: "100%",
-        height: "100%",
-        borderRadius: 10,
+        width: "30%",
+        height: "30%",
+        borderRadius: 100,
         justifyContent: "center",
         alignItems: "center"
     }
