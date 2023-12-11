@@ -1,38 +1,51 @@
 import { useEffect } from "react";
-import { StyleSheet, View } from "react-native";
-import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withTiming } from "react-native-reanimated";
+import { TextInput, View } from "react-native";
+import Animated, { useAnimatedProps, useAnimatedStyle, useDerivedValue, useSharedValue, withDelay, withRepeat, withTiming } from "react-native-reanimated";
+
+Animated.addWhitelistedNativeProps({ text: true })
+const AnimatedText = Animated.createAnimatedComponent(TextInput)
 
 export default function Typing() {
     const duration = 500
-    const linear = useSharedValue(0)
+    const shared = useSharedValue({ y: -10, bg: "blue" })
 
-    const animatedDefault = useAnimatedStyle(() => ({
-        transform: [{ translateY: linear.value }]
+    const text = useDerivedValue(() => (
+        Math.round(Math.random() * 10).toString()
+    ))
+
+    const animatedProps = useAnimatedProps(() => ({
+        value: text.value, defaultValue: text.value
+    }))
+
+    const animatedStyle = useAnimatedStyle(() => ({
+        transform: [{ translateY: shared.value.y }],
+        backgroundColor: shared.value.bg
     }))
 
     useEffect(() => {
-        linear.value = withRepeat(withTiming(linear.value - 50, { duration }), -1, true)
+        shared.value = withRepeat(withDelay(duration * 2,
+            withTiming({ y: shared.value.y + 10, bg: "red" }, { duration }),
+        ), -1, true)
     }, [])
 
-    return <View style={styles.container}>
-        <Animated.View style={[styles.animatedView, animatedDefault]} />
+    return <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
+        <AnimatedText
+            animatedProps={animatedProps}
+            editable={false}
+            underlineColorAndroid="transparent"
+            style={[{ fontSize: 32 }, animatedStyle]}
+        />
+        <AnimatedText
+            animatedProps={animatedProps}
+            editable={false}
+            underlineColorAndroid="transparent"
+            style={[{ fontSize: 32 }, animatedStyle]}
+        />
+        <AnimatedText
+            animatedProps={animatedProps}
+            editable={false}
+            underlineColorAndroid="transparent"
+            style={[{ fontSize: 32 }, animatedStyle]}
+        />
     </View>
 }
-
-const styles = StyleSheet.create({
-    container: {
-        width: 80, height: 80,
-        borderRadius: 10,
-        marginBottom: 10,
-        justifyContent: "center",
-        alignItems: "center"
-    },
-    animatedView: {
-        backgroundColor: "blue",
-        width: "100%",
-        height: "100%",
-        borderRadius: 10,
-        justifyContent: "center",
-        alignItems: "center"
-    }
-})
