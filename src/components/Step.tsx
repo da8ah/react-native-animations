@@ -26,7 +26,6 @@ export default function Step(props: { children?: JSX.Element, index: number, coo
                 onTouchStart={() => router.push({ pathname: "/(drawer)/(tabs)/(route)/[viewer]", params: { viewer: props.index } })}
             >
                 {props.children}
-                {/* <Text>Step</Text> */}
             </Animated.View>
         </GestureDetector>
     </GestureHandlerRootView>

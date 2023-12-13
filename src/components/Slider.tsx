@@ -1,4 +1,4 @@
-import { StyleSheet, useWindowDimensions } from "react-native";
+import { StyleSheet, Text, useWindowDimensions } from "react-native";
 import { Gesture, GestureDetector, GestureHandlerRootView } from "react-native-gesture-handler";
 import Animated, { useAnimatedStyle, useSharedValue, withDecay } from "react-native-reanimated";
 
@@ -27,9 +27,11 @@ export default function Slider() {
         width.value = e.nativeEvent.layout.width
     }
 
-    return <GestureHandlerRootView onLayout={onLayout} style={[styles.container]}    >
+    return <GestureHandlerRootView onLayout={onLayout} style={[styles.container]}>
         <GestureDetector gesture={pan}>
-            <Animated.View style={[styles.animatedView, animatedDefault]} />
+            <Animated.View style={[styles.animatedView, animatedDefault]}>
+                <Text style={{ fontSize: 32 }}>👌</Text>
+            </Animated.View>
         </GestureDetector>
     </GestureHandlerRootView>
 }
@@ -43,7 +45,7 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     animatedView: {
-        backgroundColor: "blue",
+        backgroundColor: "red",
         width: "100%",
         height: "100%",
         borderRadius: 10,
