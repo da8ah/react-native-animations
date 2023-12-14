@@ -17,7 +17,7 @@ export default function TabsLayout() {
             }}
         />
         <Tabs.Screen
-            name="components"
+            name="(guides)"
             options={{
                 tabBarIcon: ({ focused, color }) => <FontAwesome name="code" size={focused ? 32 : 24} color={color} />
             }}
