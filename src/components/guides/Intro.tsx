@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withTiming } from "react-native-reanimated";
 
-export default function Code() {
+export default function Intro() {
     const duration = 200
     const shared = useSharedValue({ scale: 1.1, opacity: 0 })
 
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     animatedView: {
-        backgroundColor: "blue",
+        backgroundColor: "red",
         width: "100%",
         height: "100%",
         borderRadius: 10,

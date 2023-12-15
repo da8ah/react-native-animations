@@ -1,10 +1,10 @@
 import Appear from "@/components/Appear";
 import Bounce from "@/components/Bounce";
+import Draggable from "@/components/Draggable";
 import Fade from "@/components/Fade";
 import Flip from "@/components/Flip";
 import Loading from "@/components/Loading";
 import Pulse from "@/components/Pulse";
-import Slider from "@/components/Slider";
 import Split from "@/components/Split";
 import Step from "@/components/Step";
 import Typing from "@/components/Typing";
@@ -16,7 +16,7 @@ import { ScrollView, Text } from "react-native";
 export const components = {
     ["1" as string]: <Flip />,
     ["2" as string]: <Typing />,
-    ["3" as string]: <Slider />,
+    ["3" as string]: <Draggable />,
     ["4" as string]: <Split />,
     ["5" as string]: <Loading />,
     ["6" as string]: <Wave />,
