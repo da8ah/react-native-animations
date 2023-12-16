@@ -5,6 +5,6 @@ export default function StackLayout() {
     const { id } = useLocalSearchParams<{ id: string }>()
     return <Stack>
         <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="[id]" options={{ animation: "slide_from_right", headerShown: true, title: components[id]?.type.name || "" }} />
+        <Stack.Screen name="[id]" options={{ headerShown: true, title: components[id]?.type.name || "", animation: "slide_from_right" }} />
     </Stack>
 }
