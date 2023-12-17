@@ -5,7 +5,7 @@ import Animated, { Easing, runOnJS, useAnimatedStyle, useSharedValue, withDelay,
 export default function Code() {
     const duration = 200
     const shared = useSharedValue({ scale: 1.1, opacity: 0 })
-    const code = useSharedValue({ width: 0 })
+    const code = useSharedValue<{ display: "none" | "flex" }>({ display: "none" })
     const [hidden, setHidden] = useState(false)
 
     const animatedDefault = useAnimatedStyle(() => ({
@@ -13,7 +13,7 @@ export default function Code() {
         opacity: shared.value.opacity
     }))
     const animatedCode = useAnimatedStyle(() => ({
-        width: code.value.width
+        display: code.value.display
     }))
 
     useEffect(() => {
@@ -28,9 +28,9 @@ export default function Code() {
         )
 
         code.value = withRepeat(withDelay(duration * 5,
-            withSequence(
-                withTiming({ width: 100 }, { duration, easing: Easing.linear }, () => { runOnJS(setHidden)(true) }),
-                withTiming({ width: 0 }, { duration, easing: Easing.linear }, () => { runOnJS(setHidden)(false) }),
+            withSequence<{ display: "flex" | "none" }>(
+                withTiming({ display: "flex" }, { duration, easing: Easing.linear }, () => { runOnJS(setHidden)(true) }),
+                withDelay(duration * 5, withTiming({ display: "none" }, { duration, easing: Easing.linear }, () => { runOnJS(setHidden)(false) })),
             )), -1, true)
     }, [])
 
@@ -45,11 +45,11 @@ export default function Code() {
                 {/* <Text style={{ flexDirection: "row" }}>
                     <Text style={styles.textPurple}>const </Text><Text style={styles.textRed}>duration </Text><Text style={styles.textPurple}>= </Text><Text style={styles.textOrange}>200 </Text>
                 </Text> */}
-                <Animated.Text style={[{ flexDirection: "row" }, !hidden && animatedCode]}>
-                    <Text style={styles.textAquaI}>return </Text><Text style={styles.textAqua}>{"<"}</Text><Text style={styles.textYellow}>{"Animated.View "}</Text>
-                </Animated.Text>
                 <Animated.Text style={[{ display: !hidden ? "flex" : "none", flexDirection: "row" }]}>
                     <Text style={styles.textAquaI}>return </Text><Text style={styles.textAqua}>{"<"}</Text><Text style={styles.textYellow}>{"View "}</Text>
+                </Animated.Text>
+                <Animated.Text style={[{ flexDirection: "row" }, !hidden && animatedCode]}>
+                    <Text style={styles.textAquaI}>return </Text><Text style={styles.textAqua}>{"<"}</Text><Text style={styles.textYellow}>{"Animated.View "}</Text>
                 </Animated.Text>
                 <View style={{ flexDirection: "column", paddingLeft: 20 }}>
                     <Text style={{ flexDirection: "row" }}>
