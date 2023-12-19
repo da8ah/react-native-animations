@@ -5,15 +5,19 @@ import Animated, { Easing, runOnJS, useAnimatedStyle, useSharedValue, withDelay,
 export default function Code() {
     const duration = 200
     const shared = useSharedValue({ scale: 1.1, opacity: 0 })
-    const code = useSharedValue<{ display: "none" | "flex" }>({ display: "none" })
-    const [hidden, setHidden] = useState(false)
+    const shown = useSharedValue<{ display: "none" | "flex" }>({ display: "flex" })
+    const hidden = useSharedValue<{ display: "none" | "flex" }>({ display: "none" })
+    const [visible, setVisible] = useState(false)
 
     const animatedDefault = useAnimatedStyle(() => ({
         transform: [{ scale: shared.value.scale }],
         opacity: shared.value.opacity
     }))
-    const animatedCode = useAnimatedStyle(() => ({
-        display: code.value.display
+    const animatedShown = useAnimatedStyle(() => ({
+        display: shown.value.display
+    }))
+    const animatedHidden = useAnimatedStyle(() => ({
+        display: hidden.value.display
     }))
 
     useEffect(() => {
@@ -27,11 +31,20 @@ export default function Code() {
                 )), -1, true)
         )
 
-        code.value = withRepeat(withDelay(duration * 5,
-            withSequence<{ display: "flex" | "none" }>(
-                withTiming({ display: "flex" }, { duration, easing: Easing.linear }, () => { runOnJS(setHidden)(true) }),
-                withDelay(duration * 5, withTiming({ display: "none" }, { duration, easing: Easing.linear }, () => { runOnJS(setHidden)(false) })),
-            )), -1, true)
+        shown.value = withTiming({ display: "none" }, { duration, easing: Easing.linear }, () => { runOnJS(setVisible)(false) })
+
+        // shown.value = withRepeat(withDelay(duration * 5,
+        //     withSequence<{ display: "flex" | "none" }>(
+        //         withTiming({ display: "none" }, { duration, easing: Easing.linear }, () => { runOnJS(setVisible)(false) }),
+        //         withDelay(duration * 5, withTiming({ display: "flex" }, { duration, easing: Easing.linear }, () => { runOnJS(setVisible)(true) })),
+        //     )), -1, true)
+
+        // hidden.value = withRepeat(withDelay(duration * 5,
+        //     withSequence<{ display: "flex" | "none" }>(
+        //         withTiming({ display: "none" }, { duration, easing: Easing.linear }),
+        //         withDelay(duration * 5, withTiming({ display: "flex" }, { duration, easing: Easing.linear })),
+        //     )), -1, true)
+
     }, [])
 
     return <View style={styles.container}>
@@ -45,11 +58,10 @@ export default function Code() {
                 {/* <Text style={{ flexDirection: "row" }}>
                     <Text style={styles.textPurple}>const </Text><Text style={styles.textRed}>duration </Text><Text style={styles.textPurple}>= </Text><Text style={styles.textOrange}>200 </Text>
                 </Text> */}
-                <Animated.Text style={[{ display: !hidden ? "flex" : "none", flexDirection: "row" }]}>
-                    <Text style={styles.textAquaI}>return </Text><Text style={styles.textAqua}>{"<"}</Text><Text style={styles.textYellow}>{"View "}</Text>
-                </Animated.Text>
-                <Animated.Text style={[{ flexDirection: "row" }, !hidden && animatedCode]}>
-                    <Text style={styles.textAquaI}>return </Text><Text style={styles.textAqua}>{"<"}</Text><Text style={styles.textYellow}>{"Animated.View "}</Text>
+                <Animated.Text style={[{ flexDirection: "row" }, animatedShown]}>
+                    <Text style={styles.textAquaI}>return </Text>
+                    <Text style={styles.textAqua}>{"<"}</Text><Text style={styles.textYellow}>{"View "}</Text>
+                    {/* <Text style={styles.textAqua}>{"<"}</Text><Text style={styles.textYellow}>{"Animated.View "}</Text> */}
                 </Animated.Text>
                 <View style={{ flexDirection: "column", paddingLeft: 20 }}>
                     <Text style={{ flexDirection: "row" }}>
