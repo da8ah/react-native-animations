@@ -1,23 +1,25 @@
 import { useEffect, useState } from "react";
-import { Button, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import Animated, { Easing, runOnJS, useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withTiming } from "react-native-reanimated";
+
+type AnimationProps = {
+    opacity?: number,
+    height?: number
+}
 
 export default function Code() {
     const duration = 200
     const shared = useSharedValue({ scale: 1.1, opacity: 0 })
-    const shown = useSharedValue<{ display: "none" | "flex" }>({ display: "flex" })
-    const hidden = useSharedValue<{ display: "none" | "flex" }>({ display: "none" })
+    const code = useSharedValue<AnimationProps>({ opacity: 0, height: 0 })
     const [visible, setVisible] = useState(false)
 
     const animatedDefault = useAnimatedStyle(() => ({
         transform: [{ scale: shared.value.scale }],
         opacity: shared.value.opacity
     }))
-    const animatedShown = useAnimatedStyle(() => ({
-        display: shown.value.display
-    }))
-    const animatedHidden = useAnimatedStyle(() => ({
-        display: hidden.value.display
+    const animatedCode = useAnimatedStyle(() => ({
+        opacity: code.value.opacity,
+        height: code.value.height,
     }))
 
     useEffect(() => {
@@ -31,19 +33,14 @@ export default function Code() {
                 )), -1, true)
         )
 
-        shown.value = withTiming({ display: "none" }, { duration, easing: Easing.linear }, () => { runOnJS(setVisible)(false) })
-
-        // shown.value = withRepeat(withDelay(duration * 5,
-        //     withSequence<{ display: "flex" | "none" }>(
-        //         withTiming({ display: "none" }, { duration, easing: Easing.linear }, () => { runOnJS(setVisible)(false) }),
-        //         withDelay(duration * 5, withTiming({ display: "flex" }, { duration, easing: Easing.linear }, () => { runOnJS(setVisible)(true) })),
-        //     )), -1, true)
-
-        // hidden.value = withRepeat(withDelay(duration * 5,
-        //     withSequence<{ display: "flex" | "none" }>(
-        //         withTiming({ display: "none" }, { duration, easing: Easing.linear }),
-        //         withDelay(duration * 5, withTiming({ display: "flex" }, { duration, easing: Easing.linear })),
-        //     )), -1, true)
+        code.value = withRepeat(withDelay(duration * 5,
+            withSequence<AnimationProps>(
+                withTiming({ opacity: 0, height: 25 }, { duration }),
+                withTiming({ opacity: 100, height: 25 }, { duration }),
+                withDelay(duration * 10, withTiming({ opacity: 100, height: 25 }, { duration }, () => runOnJS(setVisible)(true))),
+                withDelay(duration * 25, withTiming({ opacity: 0, height: 25 }, { duration })),
+                withTiming({ opacity: 0, height: 0 }, { duration }, () => runOnJS(setVisible)(false)),
+            )), -1, true)
 
     }, [])
 
@@ -55,13 +52,17 @@ export default function Code() {
                     <Text style={styles.textAquaI}>export default </Text><Text style={styles.textPurple}>function </Text><Text style={styles.textBlue}>Code </Text><Text style={styles.textYellow}>( ) </Text>
                 </Text>
                 <View style={{ height: 20 }} />
-                {/* <Text style={{ flexDirection: "row" }}>
+                {/* <Animated.Text style={[{ flexDirection: "row" }, animatedCode]}>
                     <Text style={styles.textPurple}>const </Text><Text style={styles.textRed}>duration </Text><Text style={styles.textPurple}>= </Text><Text style={styles.textOrange}>200 </Text>
-                </Text> */}
-                <Animated.Text style={[{ flexDirection: "row" }, animatedShown]}>
+                </Animated.Text> */}
+                <Animated.Text style={[{ flexDirection: "row" }, animatedCode]}>
                     <Text style={styles.textAquaI}>return </Text>
-                    <Text style={styles.textAqua}>{"<"}</Text><Text style={styles.textYellow}>{"View "}</Text>
-                    {/* <Text style={styles.textAqua}>{"<"}</Text><Text style={styles.textYellow}>{"Animated.View "}</Text> */}
+                    <Text style={styles.textAqua}>{"<"}</Text>
+                    {!visible ?
+                        <Text style={styles.textYellow}>{"View "}</Text>
+                        :
+                        <Text style={styles.textYellow}>{"Animated.View "}</Text>
+                    }
                 </Animated.Text>
                 <View style={{ flexDirection: "column", paddingLeft: 20 }}>
                     <Text style={{ flexDirection: "row" }}>
@@ -80,12 +81,8 @@ export default function Code() {
                         <Text style={styles.textBlue}>{"}"}</Text><Text style={styles.textPurple}>{"}"}</Text>
                     </Text>
                 </View>
-                <Text style={styles.textAqua}>{"/>"}</Text>
+                <Animated.Text style={[styles.textAqua, animatedCode]}>{"/>"}</Animated.Text>
             </ScrollView>
-        </View>
-        <View style={{ flexDirection: "row", width: "100%", padding: 5, justifyContent: "space-evenly", alignItems: "center" }}>
-            <Button title="back" />
-            <Button title="next" />
         </View>
     </View>
 }
