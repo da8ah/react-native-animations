@@ -10,12 +10,17 @@ type AnimationProps = {
 export default function Code() {
     const duration = 200
     const shared = useSharedValue({ scale: 1.1, opacity: 0 })
-    const code = useSharedValue<AnimationProps>({ opacity: 0, height: 0 })
-    const [visible, setVisible] = useState(false)
-
     const animatedDefault = useAnimatedStyle(() => ({
         transform: [{ scale: shared.value.scale }],
         opacity: shared.value.opacity
+    }))
+
+    const [visible, setVisible] = useState(false)
+    const init = useSharedValue<AnimationProps>({ opacity: 0, height: 0 })
+    const code = useSharedValue<AnimationProps>({ opacity: 0, height: 0 })
+    const animatedInit = useAnimatedStyle(() => ({
+        opacity: init.value.opacity,
+        height: init.value.height,
     }))
     const animatedCode = useAnimatedStyle(() => ({
         opacity: code.value.opacity,
@@ -33,15 +38,23 @@ export default function Code() {
                 )), -1, true)
         )
 
-        code.value = withRepeat(withDelay(duration * 5,
-            withSequence<AnimationProps>(
-                withTiming({ opacity: 0, height: 25 }, { duration }),
-                withTiming({ opacity: 100, height: 25 }, { duration }),
-                withDelay(duration * 10, withTiming({ opacity: 100, height: 25 }, { duration }, () => runOnJS(setVisible)(true))),
-                withDelay(duration * 25, withTiming({ opacity: 0, height: 25 }, { duration })),
-                withTiming({ opacity: 0, height: 0 }, { duration }, () => runOnJS(setVisible)(false)),
-            )), -1, true)
-
+        init.value = withSequence<AnimationProps>(
+            withTiming({ opacity: 0, height: 25 }, { duration }),
+            withTiming({ opacity: 100, height: 25 }, { duration }),
+            withDelay(duration * 10, withTiming({ opacity: 100, height: 25 }, { duration }, () => runOnJS(setVisible)(true))),
+        )
+        code.value = withSequence<AnimationProps>(
+            withTiming({ opacity: 0, height: 25 }, { duration }),
+            withTiming({ opacity: 100, height: 25 }, { duration }),
+        )
+        // init.value = withSequence<AnimationProps>(
+        //     withDelay(duration * 25, withTiming({ opacity: 0, height: 25 }, { duration })),
+        //     withTiming({ opacity: 0, height: 0 }, { duration }, () => runOnJS(setVisible)(false)),
+        // )
+        // code.value = withSequence<AnimationProps>(
+        //     withDelay(duration * 25, withTiming({ opacity: 0, height: 25 }, { duration })),
+        //     withTiming({ opacity: 0, height: 0 }, { duration }),
+        // )
     }, [])
 
     return <View style={styles.container}>
@@ -52,10 +65,10 @@ export default function Code() {
                     <Text style={styles.textAquaI}>export default </Text><Text style={styles.textPurple}>function </Text><Text style={styles.textBlue}>Code </Text><Text style={styles.textYellow}>( ) </Text>
                 </Text>
                 <View style={{ height: 20 }} />
-                {/* <Animated.Text style={[{ flexDirection: "row" }, animatedCode]}>
-                    <Text style={styles.textPurple}>const </Text><Text style={styles.textRed}>duration </Text><Text style={styles.textPurple}>= </Text><Text style={styles.textOrange}>200 </Text>
-                </Animated.Text> */}
                 <Animated.Text style={[{ flexDirection: "row" }, animatedCode]}>
+                    <Text style={styles.textPurple}>const </Text><Text style={styles.textRed}>duration </Text><Text style={styles.textPurple}>= </Text><Text style={styles.textOrange}>200 </Text>
+                </Animated.Text>
+                <Animated.Text style={[{ flexDirection: "row" }, animatedInit]}>
                     <Text style={styles.textAquaI}>return </Text>
                     <Text style={styles.textAqua}>{"<"}</Text>
                     {!visible ?
@@ -81,7 +94,7 @@ export default function Code() {
                         <Text style={styles.textBlue}>{"}"}</Text><Text style={styles.textPurple}>{"}"}</Text>
                     </Text>
                 </View>
-                <Animated.Text style={[styles.textAqua, animatedCode]}>{"/>"}</Animated.Text>
+                <Animated.Text style={[styles.textAqua, animatedInit]}>{"/>"}</Animated.Text>
             </ScrollView>
         </View>
     </View>
