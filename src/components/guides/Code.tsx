@@ -17,14 +17,19 @@ export default function Code() {
 
     const [visible, setVisible] = useState(false)
     const init = useSharedValue<CodeProps>({ opacity: 0, height: 0 })
-    const code = useSharedValue<CodeProps>({ opacity: 0, height: 0 })
+    const variables = useSharedValue<CodeProps>({ opacity: 0, height: 0 })
+    const aniStyle = useSharedValue<CodeProps>({ opacity: 0, height: 0 })
     const animatedInit = useAnimatedStyle(() => ({
         opacity: init.value.opacity,
         height: init.value.height,
     }))
-    const animatedCode = useAnimatedStyle(() => ({
-        opacity: code.value.opacity,
-        height: code.value.height,
+    const animatedVars = useAnimatedStyle(() => ({
+        opacity: variables.value.opacity,
+        height: variables.value.height,
+    }))
+    const animatedAniStyle = useAnimatedStyle(() => ({
+        opacity: aniStyle.value.opacity,
+        height: aniStyle.value.height,
     }))
 
     useEffect(() => {
@@ -41,13 +46,20 @@ export default function Code() {
         init.value = withSequence<CodeProps>(
             withTiming({ opacity: 0, height: 25 }, { duration }),
             withTiming({ opacity: 100, height: 25 }, { duration }),
-            withDelay(duration * 10, withTiming({ opacity: 100, height: 25 }, { duration }, () => {
-                runOnJS(setVisible)(true)
-                code.value = withDelay(duration * 5, withSequence<CodeProps>(
-                    withTiming({ opacity: 0, height: 25 }, { duration }),
-                    withTiming({ opacity: 100, height: 25 }, { duration }),
-                ))
-            })),
+            withDelay(duration * 10, withTiming({ opacity: 100, height: 25 }, { duration },
+                () => {
+                    runOnJS(setVisible)(true)
+                    variables.value = withDelay(duration * 5, withSequence<CodeProps>(
+                        withTiming({ opacity: 0, height: 25 }, { duration }),
+                        withTiming({ opacity: 100, height: 25 }, { duration },
+                            () => {
+                                aniStyle.value = withDelay(duration * 5, withSequence<CodeProps>(
+                                    withTiming({ opacity: 0, height: 100 }, { duration }),
+                                    withTiming({ opacity: 100, height: 100 }, { duration: duration * 10 })
+                                ))
+                            }),
+                    ))
+                })),
         )
         // init.value = withSequence<AnimationProps>(
         //     withDelay(duration * 25, withTiming({ opacity: 0, height: 25 }, { duration })),
@@ -63,21 +75,43 @@ export default function Code() {
         <Animated.View style={[styles.animatedView, animatedDefault]} />
         <View style={styles.code}>
             <ScrollView horizontal>
-                <View>
+                <ScrollView>
                     <Text style={{ flexDirection: "row" }}>
                         <Text style={styles.textAquaI}>export default </Text><Text style={styles.textPurple}>function </Text><Text style={styles.textBlue}>Code </Text><Text style={styles.textYellow}>( ) </Text>
                     </Text>
                     <View style={{ height: 20 }} />
-                    <Animated.Text style={[{ flexDirection: "row" }, animatedCode]}>
+                    <Animated.Text style={[{ flexDirection: "row" }, animatedVars]}>
                         <Text style={styles.textPurple}>const </Text><Text style={styles.textRed}>duration </Text><Text style={styles.textPurple}>= </Text><Text style={styles.textOrange}>200 </Text>
                     </Animated.Text>
-                    <Animated.Text style={[{ flexDirection: "row" }, animatedCode]}>
+                    <Animated.Text style={[{ flexDirection: "row" }, animatedVars]}>
                         <Text style={styles.textPurple}>const </Text><Text style={styles.textRed}>shared </Text><Text style={styles.textPurple}>= </Text><Text style={styles.textBlue}>useSharedValue</Text>
-                        <Text style={styles.textYellow}>{"("}</Text><Text style={styles.textPurple}>{"{"}</Text>
+                        <Text style={styles.textYellow}>{"("}</Text><Text style={styles.textPurple}>{"{ "}</Text>
                         <Text style={styles.textGray}>scale</Text><Text style={styles.textAqua}>: </Text><Text style={styles.textOrange}>1.1</Text><Text style={styles.textAqua}>, </Text>
                         <Text style={styles.textGray}>opacity</Text><Text style={styles.textAqua}>: </Text><Text style={styles.textOrange}>0</Text>
-                        <Text style={styles.textPurple}>{"}"}</Text><Text style={styles.textYellow}>{")"}</Text>
+                        <Text style={styles.textPurple}>{" }"}</Text><Text style={styles.textYellow}>{")"}</Text>
                     </Animated.Text>
+                    <View style={{ height: 20 }} />
+                    <Animated.View style={animatedAniStyle}>
+                        <Text style={{ flexDirection: "row" }}>
+                            <Text style={styles.textPurple}>const </Text><Text style={styles.textRed}>animatedDefault </Text><Text style={styles.textPurple}>= </Text><Text style={styles.textBlue}>useAnimatedStyle</Text>
+                            <Text style={styles.textYellow}>{"("}</Text>
+                            <Text style={styles.textPurple}>{"( ) => ({"}</Text>
+                        </Text>
+                        <View style={{ flexDirection: "column", paddingLeft: 20 }}>
+                            <Text style={{ flexDirection: "row" }}>
+                                <Text style={styles.textGray}>transform</Text><Text style={styles.textAqua}>: </Text>
+                                <Text style={styles.textYellow}>{"["}</Text><Text style={styles.textBlue}>{"{ "}</Text>
+                                <Text style={styles.textGray}>scale</Text><Text style={styles.textAqua}>: </Text><Text style={styles.textGray}>shared.value.scale</Text>
+                                <Text style={styles.textBlue}>{" }"}</Text><Text style={styles.textYellow}>{"]"}</Text><Text style={styles.textAqua}>, </Text>
+                            </Text>
+                            <Text style={{ flexDirection: "row" }}>
+                                <Text style={styles.textGray}>opacity</Text><Text style={styles.textAqua}>: </Text><Text style={styles.textGray}>shared.value.opacity</Text>
+                            </Text>
+                        </View>
+                        <Text style={{ flexDirection: "row" }}>
+                            <Text style={styles.textPurple}>{"})"}</Text><Text style={styles.textYellow}>{")"}</Text>
+                        </Text>
+                    </Animated.View>
                     <Animated.Text style={[{ flexDirection: "row" }, animatedInit]}>
                         <Text style={styles.textAquaI}>return </Text>
                         <Text style={styles.textAqua}>{"<"}</Text>
@@ -105,7 +139,7 @@ export default function Code() {
                         </Text>
                     </View>
                     <Animated.Text style={[styles.textAqua, animatedInit]}>{"/>"}</Animated.Text>
-                </View>
+                </ScrollView>
             </ScrollView>
         </View>
     </View>
@@ -122,7 +156,7 @@ const styles = StyleSheet.create({
     code: {
         backgroundColor: "#424242",
         width: "90%",
-        height: "50%",
+        minHeight: "50%",
         padding: 5,
         borderRadius: 10
     },
