@@ -19,6 +19,7 @@ export default function Code() {
     const init = useSharedValue<CodeProps>({ opacity: 0, height: 0 })
     const variables = useSharedValue<CodeProps>({ opacity: 0, height: 0 })
     const aniStyle = useSharedValue<CodeProps>({ opacity: 0, height: 0 })
+    const effect = useSharedValue<CodeProps>({ opacity: 0, height: 0 })
     const animatedInit = useAnimatedStyle(() => ({
         opacity: init.value.opacity,
         height: init.value.height,
@@ -30,6 +31,10 @@ export default function Code() {
     const animatedAniStyle = useAnimatedStyle(() => ({
         opacity: aniStyle.value.opacity,
         height: aniStyle.value.height,
+    }))
+    const animatedUseEffect = useAnimatedStyle(() => ({
+        opacity: effect.value.opacity,
+        height: effect.value.height,
     }))
 
     useEffect(() => {
@@ -55,7 +60,13 @@ export default function Code() {
                             () => {
                                 aniStyle.value = withDelay(duration * 5, withSequence<CodeProps>(
                                     withTiming({ opacity: 0, height: 100 }, { duration }),
-                                    withTiming({ opacity: 100, height: 100 }, { duration: duration * 10 })
+                                    withTiming({ opacity: 100, height: 100 }, { duration: duration * 10 },
+                                        () => {
+                                            effect.value = withDelay(duration * 5, withSequence<CodeProps>(
+                                                withTiming({ opacity: 0, height: 100 }, { duration }),
+                                                withTiming({ opacity: 100, height: 100 }, { duration: duration * 10 })
+                                            ))
+                                        })
                                 ))
                             }),
                     ))
@@ -110,6 +121,43 @@ export default function Code() {
                         </View>
                         <Text style={{ flexDirection: "row" }}>
                             <Text style={styles.textPurple}>{"})"}</Text><Text style={styles.textYellow}>{")"}</Text>
+                        </Text>
+                    </Animated.View>
+                    <Animated.View style={animatedUseEffect}>
+                        <Text style={{ flexDirection: "row" }}>
+                            <Text style={styles.textBlue}>useEffect</Text>
+                            <Text style={styles.textYellow}>{"("}</Text>
+                            <Text style={styles.textPurple}>{"( ) => {"}</Text>
+                        </Text>
+                        <View style={{ flexDirection: "column", paddingLeft: 20 }}>
+                            <Text style={{ flexDirection: "row" }}>
+                                <Text style={styles.textGray}>shared.value</Text><Text style={styles.textPurple}> = </Text>
+                                <Text style={styles.textBlue}>withSequence</Text><Text style={styles.textPurple}>{"("}</Text>
+                            </Text>
+                            <View style={{ flexDirection: "column", paddingLeft: 20 }}>
+                                <Text style={{ flexDirection: "row" }}>
+                                    <Text style={styles.textBlue}>{"withDelay("}</Text><Text style={styles.textGray}>duration </Text><Text style={styles.textPurple}>* </Text><Text style={styles.textOrange}>2.5</Text><Text style={styles.textAqua}>, </Text>
+                                    <Text style={styles.textBlue}>withTiming</Text><Text style={styles.textYellow}>{"("}</Text><Text style={styles.textBlue}>{"{ "}</Text>
+                                    <Text style={styles.textGray}>scale </Text><Text style={styles.textAqua}>: </Text><Text style={styles.textGray}>shared.value.scale </Text><Text style={styles.textPurple}>- </Text><Text style={styles.textOrange}>.1</Text><Text style={styles.textAqua}>, </Text>
+                                    <Text style={styles.textGray}>opacity </Text><Text style={styles.textAqua}>: </Text><Text style={styles.textGray}>shared.value.opacity </Text><Text style={styles.textPurple}>+ </Text><Text style={styles.textOrange}>1 </Text>
+                                    <Text style={styles.textBlue}>{"}"}</Text><Text style={styles.textAqua}>, </Text><Text style={styles.textBlue}>{"{ "}</Text>
+                                    <Text style={styles.textGray}>duration</Text><Text style={styles.textAqua}>, </Text><Text style={styles.textGray}>easing</Text><Text style={styles.textAqua}>: </Text><Text style={styles.textGray}>Easing.linear </Text>
+                                    <Text style={styles.textBlue}>{"}"}</Text><Text style={styles.textYellow}>{")"}</Text><Text style={styles.textBlue}>{")"}</Text><Text style={styles.textAqua}>,</Text>
+                                </Text>
+                                <Text style={{ flexDirection: "row" }}>
+                                    <Text style={styles.textBlue}>{"withDelay("}</Text><Text style={styles.textGray}>duration </Text><Text style={styles.textPurple}>* </Text><Text style={styles.textOrange}>5</Text><Text style={styles.textAqua}>, </Text>
+                                    <Text style={styles.textBlue}>withTiming</Text><Text style={styles.textYellow}>{"("}</Text><Text style={styles.textBlue}>{"{ "}</Text>
+                                    <Text style={styles.textGray}>scale </Text><Text style={styles.textAqua}>: </Text><Text style={styles.textGray}>shared.value.scale</Text><Text style={styles.textAqua}>, </Text>
+                                    <Text style={styles.textGray}>opacity </Text><Text style={styles.textAqua}>: </Text><Text style={styles.textGray}>shared.value.opacity </Text>
+                                    <Text style={styles.textBlue}>{"}"}</Text><Text style={styles.textAqua}>, </Text><Text style={styles.textBlue}>{"{ "}</Text>
+                                    <Text style={styles.textGray}>duration</Text><Text style={styles.textAqua}>, </Text><Text style={styles.textGray}>easing</Text><Text style={styles.textAqua}>: </Text><Text style={styles.textGray}>Easing.linear </Text>
+                                    <Text style={styles.textBlue}>{"}"}</Text><Text style={styles.textYellow}>{")"}</Text><Text style={styles.textBlue}>{")"}</Text><Text style={styles.textAqua}>,</Text>
+                                </Text>
+                            </View>
+                            <Text style={styles.textPurple}>{")"}</Text>
+                        </View>
+                        <Text style={{ flexDirection: "row" }}>
+                            <Text style={styles.textPurple}>{"}"}</Text><Text style={styles.textAqua}>, </Text><Text style={styles.textYellow}>{"[ ])"}</Text>
                         </Text>
                     </Animated.View>
                     <Animated.Text style={[{ flexDirection: "row" }, animatedInit]}>
