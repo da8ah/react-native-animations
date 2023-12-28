@@ -64,14 +64,7 @@ export default function Code() {
                                         () => {
                                             effect.value = withDelay(duration * 5, withSequence<CodeProps>(
                                                 withTiming({ opacity: 0, height: 200 }, { duration }),
-                                                withDelay(duration * 5, withTiming({ opacity: 100, height: 200 }, { duration }),
-                                                    // withDelay(duration * 50, withTiming({ opacity: 0, height: 0 }, { duration },
-                                                    //     () => {
-                                                    //         aniStyle.value = withTiming({ opacity: 0, height: 0 }, { duration })
-                                                    //         variables.value = withTiming({ opacity: 0, height: 0 }, { duration })
-                                                    //         runOnJS(setVisible)(false)
-                                                    //     }
-                                                    // ))
+                                                withDelay(duration * 5, withTiming({ opacity: 100, height: 200 }, { duration })
                                                 )
                                             ))
                                         }
