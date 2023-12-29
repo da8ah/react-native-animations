@@ -1,37 +1,41 @@
-import { StyleSheet, Text, useWindowDimensions } from "react-native";
+import { StyleSheet, useWindowDimensions } from "react-native";
 import { Gesture, GestureDetector, GestureHandlerRootView } from "react-native-gesture-handler";
-import Animated, { useAnimatedStyle, useSharedValue, withDecay } from "react-native-reanimated";
+import Animated, { useAnimatedStyle, useSharedValue, withDecay, withTiming } from "react-native-reanimated";
 
 export default function Slider() {
-    const SIZE = useWindowDimensions().width / 2
-    const width = useSharedValue(0)
+    const SIZE = useWindowDimensions().width
     const offset = useSharedValue(0)
+
+    const duration = 200
+    const dimensions = useSharedValue({
+        scale: 1,
+        width: 80
+    })
 
     const pan = Gesture.Pan()
         .onChange((event) => {
-            offset.value += event.changeX;
+            offset.value += event.changeX
+            dimensions.value.scale = withTiming(.5, { duration })
         })
         .onFinalize((event) => {
             offset.value = withDecay({
                 velocity: event.velocityX,
                 rubberBandEffect: true,
-                clamp: [-(width.value / 2) + SIZE / 2, width.value / 2 - SIZE / 2],
+                clamp: [-(SIZE / 2) + (dimensions.value.width / 2), (SIZE / 2) - (dimensions.value.width / 2)],
             })
+            dimensions.value.scale = withTiming(1, { duration })
         })
 
     const animatedDefault = useAnimatedStyle(() => ({
-        transform: [{ translateX: offset.value }]
+        transform: [
+            { translateX: offset.value },
+            { scale: dimensions.value.scale }
+        ]
     }))
 
-    const onLayout = (e: any) => {
-        width.value = e.nativeEvent.layout.width
-    }
-
-    return <GestureHandlerRootView onLayout={onLayout} style={[styles.container]}>
+    return <GestureHandlerRootView style={[styles.container]}>
         <GestureDetector gesture={pan}>
-            <Animated.View style={[styles.animatedView, animatedDefault]}>
-                <Text style={{ fontSize: 32 }}>👌</Text>
-            </Animated.View>
+            <Animated.View style={[styles.animatedView, animatedDefault]} />
         </GestureDetector>
     </GestureHandlerRootView>
 }
