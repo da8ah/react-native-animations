@@ -12,7 +12,9 @@ export default function HomeLayout() {
             screenOptions={{
                 headerStatusBarHeight: 0,
                 headerTitle: "",
-                headerLeft: () => <DrawerToggleButton />
+                headerLeft: () => <DrawerToggleButton />,
+                swipeEnabled: false,
+                drawerHideStatusBarOnOpen: true
             }}
         >
             <Drawer.Screen
