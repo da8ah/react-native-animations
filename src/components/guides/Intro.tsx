@@ -1,45 +1,42 @@
 import { useEffect } from "react";
-import { StyleSheet, View } from "react-native";
-import Animated, { Easing, useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withTiming } from "react-native-reanimated";
+import { StyleSheet, Text, View } from "react-native";
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withSequence, withTiming } from "react-native-reanimated";
 
 export default function Intro() {
     const duration = 200
-    const shared = useSharedValue({ scale: 1.1, opacity: 0 })
+    const shared = useSharedValue<{ opacity?: number, scale: number, rotate: number }>({ opacity: 0, scale: 0, rotate: 0 })
 
     const animatedDefault = useAnimatedStyle(() => ({
-        transform: [{ scale: shared.value.scale }],
-        opacity: shared.value.opacity
+        opacity: shared.value.opacity,
+        transform: [
+            { scale: shared.value.scale },
+            { rotateZ: `${shared.value.rotate}deg` },
+        ]
     }))
 
     useEffect(() => {
         shared.value = withSequence(
-            withDelay(duration * 2.5, withTiming({ scale: shared.value.scale - .1, opacity: shared.value.opacity + 1 }, { duration, easing: Easing.linear, })),
-            withDelay(duration * 5, withTiming({ scale: shared.value.scale, opacity: shared.value.opacity }, { duration, easing: Easing.linear, })),
-            withRepeat(withDelay(duration * 5,
-                withSequence(
-                    withDelay(duration * 2.5, withTiming({ scale: shared.value.scale - .1, opacity: shared.value.opacity + 1 }, { duration, easing: Easing.linear, })),
-                    withDelay(duration * 5, withTiming({ scale: shared.value.scale, opacity: shared.value.opacity }, { duration, easing: Easing.linear, }))
-                )), -1, true)
+            withTiming({ opacity: 0, scale: .1, rotate: 0 }, { duration, easing: Easing.linear, }),
+            withTiming({ opacity: .5, scale: .5, rotate: 360 }, { duration, easing: Easing.linear, }),
+            withTiming({ opacity: 1, scale: 1, rotate: 720 }, { duration, easing: Easing.linear, }),
         )
     }, [])
 
     return <View style={styles.container}>
-        <Animated.View style={[styles.animatedView, animatedDefault]} />
+        <Animated.View style={[styles.animatedView, animatedDefault]}>
+            <Text>Reanimated 3</Text>
+        </Animated.View>
     </View>
 }
 
 const styles = StyleSheet.create({
     container: {
-        width: 80, height: 80,
-        borderRadius: 10,
-        marginBottom: 10,
+        flex: 1,
         justifyContent: "center",
         alignItems: "center"
     },
     animatedView: {
         backgroundColor: "red",
-        width: "100%",
-        height: "100%",
         borderRadius: 10,
         justifyContent: "center",
         alignItems: "center"
