@@ -5,6 +5,6 @@ import { components } from ".";
 export default function Viewer() {
     const { viewer } = useLocalSearchParams<{ viewer: string }>()
     return <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        {components[viewer]}
+        {!!viewer && components[viewer]}
     </View>
 }
