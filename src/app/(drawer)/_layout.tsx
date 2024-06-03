@@ -79,7 +79,7 @@ function DrawerContent(props: DrawerContentComponentProps) {
                     elevation: 3
                 }}
             >
-                <Ionicons name="md-person-circle" size={70} color="black" />
+                <Ionicons name="person-circle" size={70} color="black" />
                 <View>
                     <Text style={{ fontSize: 20 }}>Expo User</Text>
                     <Text>correo@email.com</Text>
