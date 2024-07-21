@@ -4,7 +4,7 @@ import Animated, { Easing, useAnimatedStyle, useSharedValue, withSequence, withT
 
 export default function Intro() {
     const duration = 200
-    const shared = useSharedValue({
+    const shared = useSharedValue<any>({
         opacity: 0,
         width: 0,
         height: 0,
@@ -25,14 +25,20 @@ export default function Intro() {
     }))
 
     useEffect(() => {
-        shared.value = withSequence(
-            withTiming({ opacity: 0, width: 10, height: 10, translateX: 10, translateY: 10, rotate: 0 }, { duration }),
-            withTiming({ opacity: 1, width: 20, height: 20, translateX: -20, translateY: -20, rotate: 0 }, { duration }),
-            withTiming({ opacity: 1, width: 20, height: 20, translateX: -10, translateY: -30, rotate: 0 }, { duration }),
-            // withTiming({ opacity: 0, scale: .1, rotate: 0 }, { duration, easing: Easing.linear, }),
-            // withTiming({ opacity: .5, scale: .5, rotate: 360 }, { duration, easing: Easing.linear, }),
-            // withTiming({ opacity: 1, scale: 1, rotate: 720 }, { duration, easing: Easing.linear, }),
-        )
+        shared.value =
+            withSequence(
+                withTiming({ opacity: 0, width: 10, height: 10, translateX: 10, translateY: 10, rotate: 0 }, { duration }),
+                withTiming({ opacity: 1, width: 20, height: 20, translateX: -20, translateY: -20, rotate: 0 }, { duration }),
+                withSequence(
+                    withTiming({ opacity: 1, width: 20, height: 20, translateX: -20, translateY: -20, rotate: 0 }, { duration }),
+                    ...Array(10).fill(null).map((_, i) => (
+                        withTiming({ opacity: 1, width: 20, height: 20, translateX: -20 + i ** 2, translateY: -20 - i * 2, rotate: 0 }, { duration })
+                    ))
+                )
+                // withTiming({ opacity: 0, scale: .1, rotate: 0 }, { duration, easing: Easing.linear, }),
+                // withTiming({ opacity: .5, scale: .5, rotate: 360 }, { duration, easing: Easing.linear, }),
+                // withTiming({ opacity: 1, scale: 1, rotate: 720 }, { duration, easing: Easing.linear, }),
+            )
     }, [])
 
     return <View style={styles.container}>
