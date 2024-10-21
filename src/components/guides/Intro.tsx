@@ -29,10 +29,18 @@ export default function Intro() {
   const text = useSharedValue({
     opacity: 0,
     scale: 1,
+    top: height / 2,
+    left: width / 4,
+    rotate: 0,
   })
   const animatedText = useAnimatedStyle(() => ({
     opacity: text.value.opacity,
-    transform: [{ scale: text.value.scale }]
+    top: text.value.top,
+    left: text.value.left,
+    transform: [
+      { scale: text.value.scale, },
+      { rotate: `${text.value.rotate}deg`, },
+    ]
   }))
 
   const span1 = useSharedValue({
@@ -61,26 +69,6 @@ export default function Intro() {
 
   const launchAnimation = () => {
 
-    text.value =
-      withSequence(
-        withTiming(
-          { opacity: 0, scale: 1, },
-          { duration }
-        ),
-        withTiming(
-          { opacity: 0, scale: 1, },
-          { duration }
-        ),
-        withTiming(
-          { opacity: 0, scale: 1, },
-          { duration }
-        ),
-        withTiming(
-          { opacity: 1, scale: 1.5, },
-          { duration: duration * 15 }
-        ),
-      )
-
     dimentions.value =
       withSequence(
         withTiming(
@@ -101,11 +89,15 @@ export default function Intro() {
             { duration, easing: Easing.inOut(Easing.quad) }
           ),
           withTiming(
-            { opacity: 1, width: 20, height: 20 },
+            { opacity: .5, width: 70, height: 20 },
             { duration, easing: Easing.inOut(Easing.quad) }
           ),
           withTiming(
-            { opacity: 1, width: 50, height: 50 },
+            { opacity: .2, width: 70, height: 20 },
+            { duration, easing: Easing.inOut(Easing.quad) }
+          ),
+          withTiming(
+            { opacity: 0, width: 1, height: 1 },
             { duration, easing: Easing.inOut(Easing.quad) }
           ),
         ),
@@ -136,12 +128,46 @@ export default function Intro() {
             { duration, easing: Easing.inOut(Easing.quad) }
           ),
           withTiming(
-            { left: width / 4 + (step * 5), top: height / 3 - ((step * 1.2) ** 2), rotate: 135 },
+            { left: width / 4 + (step * 5), top: height / 3 - ((step * 1.2) ** 2), rotate: 140 },
             { duration: duration * 2, easing: Easing.inOut(Easing.quad) }
           ),
           withTiming(
-            { left: width / 4 + (step * 5), top: height / 3, rotate: 360 },
+            { left: width / 4 + (step * 5), top: height / 3, rotate: 140 },
             { duration: duration * 3, easing: Easing.inOut(Easing.quad) }
+          ),
+        ),
+      )
+
+    text.value =
+      withSequence(
+        withTiming(
+          { opacity: 0, scale: 1, left: width / 4, top: height / 3 + step, rotate: 0 },
+          { duration, easing: Easing.inOut(Easing.quad) }
+        ),
+        withTiming(
+          { opacity: 0, scale: 1, left: width / 4 + step, top: height / 3 - (step ** 2), rotate: 0 },
+          { duration, easing: Easing.inOut(Easing.quad) }
+        ),
+        withTiming(
+          { opacity: 0, scale: 1, left: width / 4 + step, top: height / 3, rotate: 0 },
+          { duration, easing: Easing.inOut(Easing.quad) }
+        ),
+        withSequence(
+          withTiming(
+            { opacity: 0, scale: 0, left: width / 4 + (step * 5), top: height / 3 - ((step * 1.2) ** 2), rotate: 0 },
+            { duration }
+          ),
+          withTiming(
+            { opacity: 0, scale: 0, left: width / 4 + (step * 5), top: height / 3 - ((step * 1.2) ** 2), rotate: 0 },
+            { duration }
+          ),
+          withTiming(
+            { opacity: .5, scale: .5, left: width / 4 + (step * 5), top: height / 3 - ((step * 1.2) ** 2), rotate: 90 },
+            { duration }
+          ),
+          withTiming(
+            { opacity: 1, scale: 1.5, left: width / 4 + (step * 5), top: height / 3, rotate: 360 },
+            { duration: duration * 15 }
           ),
         ),
       )
@@ -155,7 +181,7 @@ export default function Intro() {
         withSequence(
           withTiming(
             { left: width + width / 4, top: height / 2 - height / 4, opacity: 0 },
-            { duration: duration * 8, easing: Easing.inOut(Easing.quad) }
+            { duration: duration * 20, easing: Easing.inOut(Easing.quad) }
           ),
           withTiming(
             { left: width / 4 - width / 8, top: height / 2 - height / 4, opacity: 1 },
@@ -173,10 +199,10 @@ export default function Intro() {
         withSequence(
           withTiming(
             { left: -width / 4, top: height / 2 - height / 16, opacity: 0 },
-            { duration: duration * 8, easing: Easing.inOut(Easing.quad) }
+            { duration: duration * 20, easing: Easing.inOut(Easing.quad) }
           ),
           withTiming(
-            { left: width / 4 + width / 8, top: height / 2 - height / 16, opacity: 1 },
+            { left: width * 2.5 / 4, top: height / 2 - height / 16, opacity: 1 },
             { duration, easing: Easing.inOut(Easing.quad) }
           ),
         )
@@ -185,11 +211,10 @@ export default function Intro() {
   }
 
   return <TouchableOpacity style={styles.container} onPress={launchAnimation}>
-    <Animated.Text style={[styles.text, animatedSpan1]}>Bienvenido</Animated.Text>
-    <Animated.View style={[styles.animatedView, animatedCircle]}>
-      <Animated.Text style={[styles.text, animatedText]}>Tiber</Animated.Text>
-    </Animated.View>
-    <Animated.Text style={[styles.text, animatedSpan2]}>Nuevamente</Animated.Text>
+    <Animated.Text style={[styles.span, styles.text, animatedSpan1]}>Tiber</Animated.Text>
+    <Animated.Text style={[styles.text, animatedText]}>Reanimated 3</Animated.Text>
+    <Animated.View style={[styles.animatedView, animatedCircle]} />
+    <Animated.Text style={[styles.span, styles.text, animatedSpan2]}>Studio!</Animated.Text>
   </TouchableOpacity>
 }
 
@@ -210,6 +235,8 @@ const styles = StyleSheet.create({
   },
   text: {
     position: "absolute",
-    width: "200%",
   },
+  span: {
+    fontSize: 20
+  }
 })
